@@ -187,7 +187,7 @@ fun HomeScreen(navController: NavController) {
             actions = {
                 if (currentUser?.profileUrl.isNullOrEmpty()) {
                     Image(painter = painterResource(id = R.drawable.person),
-                        contentDescription = "",
+                        contentDescription = "This is desc",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .size(45.dp)
