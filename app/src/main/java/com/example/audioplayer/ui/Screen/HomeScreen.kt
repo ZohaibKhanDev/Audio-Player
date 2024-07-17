@@ -176,7 +176,7 @@ fun HomeScreen(navController: NavController) {
                     fontWeight = FontWeight.W400,
                 )
                 Text(
-                    text = "Jhon Johnson",
+                    text = "John Johnson",
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color.White
