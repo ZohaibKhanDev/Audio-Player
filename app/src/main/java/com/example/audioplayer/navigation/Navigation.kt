@@ -38,6 +38,7 @@ import androidx.navigation.navArgument
 import com.example.audioplayer.AudioItem
 import com.example.audioplayer.loginauth.screens.LoginScreen
 import com.example.audioplayer.loginauth.screens.MainScreen
+import com.example.audioplayer.ui.Screen.AboutUs
 import com.example.audioplayer.ui.Screen.Fav
 import com.example.audioplayer.ui.Screen.DetailScreen
 import com.example.audioplayer.ui.Screen.FavDetail
@@ -184,8 +185,12 @@ fun Navigation(navController: NavHostController, audioItems: List<AudioItem>) {
             LoginScreen(navController)
         }
 
-        composable(route = Screens.Profile.route,) {
+        composable(route = Screens.Profile.route) {
             ProfileScreen(navController = navController)
+        }
+
+        composable(Screens.AboutUs.route) {
+            AboutUs(navController = navController)
         }
 
     }
@@ -218,6 +223,7 @@ sealed class Screens(
     object MainScreen : Screens("MainScreen", Icons.Filled.MusicNote, Icons.Outlined.MusicNote)
     object LoginScreen : Screens("LoginScren", Icons.Filled.MusicNote, Icons.Outlined.MusicNote)
     object Profile : Screens("Profile", Icons.Filled.MusicNote, Icons.Outlined.MusicNote)
+    object AboutUs : Screens("AboutUs", Icons.Filled.MusicNote, Icons.Outlined.MusicNote)
 }
 
 @Composable

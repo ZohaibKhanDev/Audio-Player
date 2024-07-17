@@ -69,6 +69,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.compose.rememberImagePainter
 import com.example.audioplayer.R
+import com.example.audioplayer.navigation.Screens
 import com.example.audioplayer.realtimedatabase.Message
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -463,6 +464,7 @@ fun ProfileScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .clickable { navController.navigate(Screens.AboutUs.route) }
                             .padding(start = 10.dp),
                         horizontalArrangement = Arrangement.spacedBy(18.dp),
                         verticalAlignment = Alignment.CenterVertically
