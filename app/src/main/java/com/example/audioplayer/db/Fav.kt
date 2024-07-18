@@ -6,14 +6,9 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Fav(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int? = null,
-    @ColumnInfo("tittle")
-    val tittle: String,
-    @ColumnInfo("name")
-    val name: String,
-    @ColumnInfo("audioUrl")
-    val audioUrl: String,
-    @ColumnInfo("pic")
-    val pic:String
+    @PrimaryKey(autoGenerate = true) val id: Int? = null,
+    @ColumnInfo(name = "tittle") val tittle: String,
+    @ColumnInfo(name = "name") val name: String,
+    @ColumnInfo(name = "audioUrl") val audioUrl: String,
+    @ColumnInfo(name = "pic") val pic: String
 )

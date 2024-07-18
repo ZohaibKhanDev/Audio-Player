@@ -8,6 +8,7 @@ import com.example.audioplayer.loginauth.AuthViewModel
 import com.example.audioplayer.restapi.MainViewModel
 import com.example.audioplayer.restapi.Repository
 import com.google.firebase.auth.FirebaseAuth
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.scope.get
@@ -19,22 +20,17 @@ val appModule = module {
             androidContext(),
             FavDataBase::class.java,
             "demo.db"
-        ).allowMainThreadQueries()
-            .build()
+        ).build()
     }
 
     single { Repository(get()) }
 
-    single {
-        FirebaseAuth.getInstance()
-    }
+    single { FirebaseAuth.getInstance() }
 
-    single<AuthService> {
-        AuthRepository(get())
-    }
-    single {
-        AuthViewModel(get())
-    }
+    single<AuthService> { AuthRepository(get()) }
+
+    single { AuthViewModel(get()) }
+
     viewModel { MainViewModel(get()) }
 }
 

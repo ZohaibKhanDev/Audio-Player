@@ -7,14 +7,12 @@ import androidx.room.Query
 
 @Dao
 interface FavDao {
-    @Query("SELECT * FROM FAV")
+    @Query("SELECT * FROM Fav")
     fun getAllFav(): List<Fav>
 
     @Insert
     fun Insert(fav: Fav)
 
     @Query("DELETE FROM Fav WHERE id = :id")
-    fun delete(id:String)
-
-
+    fun delete(id: String)
 }

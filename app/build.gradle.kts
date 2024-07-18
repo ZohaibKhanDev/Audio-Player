@@ -129,7 +129,9 @@ dependencies {
     implementation("io.ktor:ktor-client-okhttp:2.0.0")
     implementation("com.google.android.exoplayer:exoplayer:2.18.7")
 
-
+    implementation ("androidx.room:room-runtime:2.6.1")
+    kapt ("androidx.room:room-compiler:2.6.1")
+    implementation ("androidx.room:room-ktx:2.6.1")
     implementation("io.github.khubaibkhan4:mediaplayer-kmp:1.0.8")
 
 
