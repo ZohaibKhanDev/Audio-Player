@@ -13,9 +13,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.scope.get
 import org.koin.dsl.module
 
-
 val appModule = module {
-
     single {
         Room.databaseBuilder(
             androidContext(),
@@ -39,4 +37,5 @@ val appModule = module {
     }
     viewModel { MainViewModel(get()) }
 }
+
 

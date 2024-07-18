@@ -204,7 +204,7 @@ fun ProfileScreen(
 
 
                 LaunchedEffect(key1 = Unit) {
-                    it.profileUrl = getImageUrlFromPrefs(context)
+                    it.profileUrl = getImageUrlFromPrefs(context).toString()
                 }
 
                 val launcher = rememberLauncherForActivityResult(
