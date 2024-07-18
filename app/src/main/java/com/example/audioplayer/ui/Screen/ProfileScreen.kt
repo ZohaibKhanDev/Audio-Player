@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.AddAPhoto
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Group
 import androidx.compose.material.icons.outlined.Person
@@ -169,6 +170,10 @@ fun ProfileScreen(
                     Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
                 }
             }, actions = {
+                IconButton(onClick = { logout=!logout }) {
+                    Icon(imageVector = Icons.Default.MoreVert, contentDescription = "")
+                }
+
                 DropdownMenu(expanded = logout, onDismissRequest = { logout = false }) {
                     DropdownMenuItem(text = { Text(text = "Sign Out") }, onClick = {
                         Firebase.auth.signOut()
