@@ -41,6 +41,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -102,13 +104,15 @@ fun ProfileScreen(
     var dialog by remember { mutableStateOf(false) }
     var isUploading by remember { mutableStateOf(false) }
     var eye by remember { mutableStateOf(false) }
+    var logout by remember { mutableStateOf(false) }
 
     if (dialog) {
         Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
     }
-
+    val sharedPreferences = context.getSharedPreferences("SignUp", Context.MODE_PRIVATE)
+    val sharedPreferencesId = sharedPreferences.getString("userId", null)
 
     LaunchedEffect(key1 = Unit) {
         uploadedImageUrl = getImageUrlFromPrefs(context)
@@ -161,17 +165,31 @@ fun ProfileScreen(
         TopAppBar(
             title = { Text(text = "Profile") },
             navigationIcon = {
-                IconButton(onClick = { navController.popBackStack() }) {
+                IconButton(onClick = { navController.navigateUp() }) {
                     Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
                 }
-            },
+            }, actions = {
+                DropdownMenu(expanded = logout, onDismissRequest = { logout = false }) {
+                    DropdownMenuItem(text = { Text(text = "Sign Out") }, onClick = {
+                        Firebase.auth.signOut()
+                        sharedPreferences.edit().remove("userId").apply()
+                        navController.navigate(Screens.MainScreen.route)
+                    })
+
+                    DropdownMenuItem(text = { Text(text = "Profile") }, onClick = {
+                        navController.navigate(Screens.Profile.route)
+                    })
+
+                    DropdownMenuItem(text = { Text(text = "Setting") }, onClick = {})
+                }
+            }
         )
     }) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
-                .padding(top = it.calculateTopPadding(), bottom = 80.dp),
+                .padding(top = it.calculateTopPadding(), bottom = 100.dp),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

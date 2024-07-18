@@ -67,6 +67,12 @@ fun Navigation(navController: NavHostController, audioItems: List<AudioItem>) {
         composable(Screens.Home.route) {
             HomeScreen(navController = navController)
         }
+        composable(Screens.MainScreen.route) {
+            MainScreen(navController)
+        }
+        composable(Screens.LoginScreen.route) {
+            LoginScreen(navController)
+        }
         composable(Screens.Fav.route) {
             Fav(navController = navController)
         }
@@ -178,12 +184,7 @@ fun Navigation(navController: NavHostController, audioItems: List<AudioItem>) {
             )
         }
 
-        composable(Screens.MainScreen.route) {
-            MainScreen(navController)
-        }
-        composable(Screens.LoginScreen.route) {
-            LoginScreen(navController)
-        }
+
 
         composable(route = Screens.Profile.route) {
             ProfileScreen(navController = navController)
