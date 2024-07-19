@@ -3,10 +3,12 @@ package com.example.audioplayer.realtimedatabase
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Firebase
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.database
 import com.google.firebase.database.ktx.getValue
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -14,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class MainViewModel2(private val repository: Repository2) : ViewModel() {
     private val _messages = MutableStateFlow<List<Message>>(emptyList())
@@ -55,6 +58,7 @@ class MainViewModel2(private val repository: Repository2) : ViewModel() {
 
 
 
+
 class Repository2(private val databaseReference: DatabaseReference) {
 
     fun getMessages(): Flow<List<Message>> = callbackFlow {
@@ -91,7 +95,17 @@ class Repository2(private val databaseReference: DatabaseReference) {
             throw e
         }
     }
+
+    suspend fun getMessageById(userId: String): Message? {
+        return try {
+            val snapshot = databaseReference.child(userId).get().await()
+            snapshot.getValue(Message::class.java)
+        } catch (e: Exception) {
+            null
+        }
+    }
 }
+
 
 
 

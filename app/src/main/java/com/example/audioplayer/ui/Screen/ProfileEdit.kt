@@ -11,6 +11,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,23 +26,34 @@ import com.example.audioplayer.realtimedatabase.Message
 import com.example.audioplayer.realtimedatabase.Repository2
 import com.google.firebase.Firebase
 import com.google.firebase.database.database
+import kotlinx.coroutines.tasks.await
 
 @Composable
 fun ProfileEdit(navController: NavController) {
     val myRef = Firebase.database.getReference("User")
-    val repository = remember {
-        Repository2(myRef)
-    }
-    val realTimeViewModel = remember {
-        MainViewModel2(repository)
-    }
+    val repository = remember { Repository2(myRef) }
+    val realTimeViewModel = remember { MainViewModel2(repository) }
     val context = LocalContext.current
-    val currentUser by remember { mutableStateOf<Message?>(null) }
+    val sharedPreferences = context.getSharedPreferences("SignUp", Context.MODE_PRIVATE)
+    val userId = sharedPreferences.getString("userId", null)
+
+    var currentUser by remember { mutableStateOf<Message?>(null) }
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    val sharedPreferences = context.getSharedPreferences("SignUp", Context.MODE_PRIVATE)
-    val sharedPreferencesId = sharedPreferences.getString("userId", null)
+    val isLoading = remember { mutableStateOf(false) }
+
+    LaunchedEffect(userId) {
+        userId?.let {
+            currentUser = repository.getMessageById(it)
+            currentUser?.let { user ->
+                name = user.name
+                email = user.email
+                password = user.password
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -72,18 +84,23 @@ fun ProfileEdit(navController: NavController) {
 
         Button(
             onClick = {
-                val updateMessage = Message(
-                    currentUser?.userId.toString(),
-                    currentUser?.profileUrl.toString(), name, email, password
-                )
-                realTimeViewModel.editMessage(sharedPreferencesId.toString(), updateMessage)
-                navController.navigateUp()
+                if (userId != null) {
+                    val updatedMessage = Message(
+                        userId,
+                        currentUser?.profileUrl ?: "",
+                        name,
+                        email,
+                        password
+                    )
+                    realTimeViewModel.editMessage(userId, updatedMessage)
+                    navController.navigateUp()
+                }
             },
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Save Changes")
         }
-
-
     }
 }
+
+
