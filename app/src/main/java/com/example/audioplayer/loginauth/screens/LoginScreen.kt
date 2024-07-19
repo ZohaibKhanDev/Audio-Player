@@ -26,6 +26,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
@@ -51,6 +53,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -98,6 +102,8 @@ fun LoginScreen(navController: NavController) {
     var uploadedImageUrl by remember { mutableStateOf<String?>(null) }
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     var isUploading by remember { mutableStateOf(false) }
+    var eye by remember { mutableStateOf(false) }
+    var eye1 by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
 
     Column(
@@ -333,7 +339,16 @@ fun LoginScreen(navController: NavController) {
                         unfocusedContainerColor = Color.LightGray.copy(alpha = 0.70f),
                         focusedTextColor = Color.DarkGray,
                         unfocusedTextColor = Color.DarkGray,
-                    )
+                    ), trailingIcon = {
+                        if (password >= 1.toString()){
+
+                            Icon(
+                                imageVector = if (eye) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                                contentDescription = "",
+                                modifier = Modifier.clickable { eye = !eye }
+                            )
+                        }
+                    }, visualTransformation = if (eye) VisualTransformation.None else PasswordVisualTransformation()
                 )
 
                 Spacer(modifier = Modifier.height(13.dp))
@@ -357,7 +372,16 @@ fun LoginScreen(navController: NavController) {
                         unfocusedContainerColor = Color.LightGray.copy(alpha = 0.70f),
                         focusedTextColor = Color.DarkGray,
                         unfocusedTextColor = Color.DarkGray,
-                    )
+                    ), trailingIcon = {
+                        if (confirmPassword >= 1.toString()){
+
+                            Icon(
+                                imageVector = if (eye1) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                                contentDescription = "",
+                                modifier = Modifier.clickable { eye1 = !eye1}
+                            )
+                        }
+                    }, visualTransformation = if (eye1) VisualTransformation.None else PasswordVisualTransformation()
                 )
 
                 Spacer(modifier = Modifier.height(9.dp))
