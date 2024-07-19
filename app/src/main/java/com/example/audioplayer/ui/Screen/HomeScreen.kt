@@ -185,7 +185,7 @@ fun HomeScreen(navController: NavController) {
         },
             colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0XFF171717)),
             actions = {
-                if (currentUser?.profileUrl.isNullOrEmpty()) {
+                if (currentUser?.profileUrl == null) {
                     Image(painter = painterResource(id = R.drawable.person),
                         contentDescription = "This is desc",
                         contentScale = ContentScale.Crop,
