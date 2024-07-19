@@ -106,7 +106,7 @@ class Repository2(private val databaseReference: DatabaseReference) {
 
     suspend fun getMessageById(userId: String): Message? {
         return try {
-            val snapshot = databaseReference.child(userId).get().await()
+            val snapshot = databaseReference.child("User").get().await()
             snapshot.getValue(Message::class.java)
         } catch (e: Exception) {
             null
