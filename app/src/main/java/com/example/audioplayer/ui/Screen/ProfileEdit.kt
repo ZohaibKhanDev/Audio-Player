@@ -41,15 +41,16 @@ fun ProfileEdit(navController: NavController) {
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    val isLoading = remember { mutableStateOf(false) }
 
     LaunchedEffect(userId) {
         userId?.let {
-            currentUser = repository.getMessageById(it)
-            currentUser?.let { user ->
-                name = user.name
-                email = user.email
-                password = user.password
+            realTimeViewModel.getMessageById(it).observeForever { user ->
+                currentUser = user
+                currentUser?.let { user ->
+                    name = user.name
+                    email = user.email
+                    password = user.password
+                }
             }
         }
     }
@@ -79,7 +80,6 @@ fun ProfileEdit(navController: NavController) {
             onValueChange = { password = it },
             label = { Text("Password") },
             placeholder = { Text("Enter your password") },
-            visualTransformation = PasswordVisualTransformation()
         )
 
         Button(
@@ -102,6 +102,8 @@ fun ProfileEdit(navController: NavController) {
         }
     }
 }
+
+
 
 
 

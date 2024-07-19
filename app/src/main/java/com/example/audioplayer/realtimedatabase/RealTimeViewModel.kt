@@ -1,7 +1,9 @@
 package com.example.audioplayer.realtimedatabase
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
 import com.google.firebase.database.DataSnapshot
@@ -52,7 +54,13 @@ class MainViewModel2(private val repository: Repository2) : ViewModel() {
             }
         }
     }
+
+    fun getMessageById(userId: String): LiveData<Message?> = liveData {
+        emit(repository.getMessageById(userId))
+    }
 }
+
+
 
 
 
@@ -105,6 +113,8 @@ class Repository2(private val databaseReference: DatabaseReference) {
         }
     }
 }
+
+
 
 
 
