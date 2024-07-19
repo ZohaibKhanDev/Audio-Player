@@ -2,6 +2,7 @@
 
 package com.example.audioplayer.navigation
 
+import acom.example.audioplayer.ui.Screen.ProfileEdit
 import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.Context
@@ -45,7 +46,6 @@ import com.example.audioplayer.ui.Screen.FavDetail
 import com.example.audioplayer.ui.Screen.HomeScreen
 import com.example.audioplayer.ui.Screen.My_Detail
 import com.example.audioplayer.ui.Screen.My_Music
-import com.example.audioplayer.ui.Screen.ProfileEdit
 import com.example.audioplayer.ui.Screen.ProfileScreen
 import com.example.audioplayer.ui.Screen.WorldSong
 
