@@ -99,6 +99,7 @@ fun LoginScreen(navController: NavController) {
     var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
     var isUploading by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -107,32 +108,6 @@ fun LoginScreen(navController: NavController) {
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(imageVector = Icons.Default.ArrowBackIosNew,
-                contentDescription = "Back",
-                modifier = Modifier.clickable { })
-
-            Image(
-                painter = painterResource(id = R.drawable.logo),
-                contentDescription = "Logo",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(25.dp)
-                    .clip(CircleShape)
-            )
-        }
-        Spacer(modifier = Modifier.height(20.dp))
-        Text(
-            text = "Create your account",
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 30.sp,
-            color = Color.Black
-        )
-
         LaunchedEffect(key1 = Unit) {
             uploadedImageUrl = getImageUrlFromPrefs(context)
         }
@@ -157,16 +132,14 @@ fun LoginScreen(navController: NavController) {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(
                             context,
-                            "com.example.signup.Image Uploaded Successfully",
+                            "Image Uploaded Successfully",
                             Toast.LENGTH_SHORT
-                        )
-                            .show()
+                        ).show()
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
                     }
-
                 } finally {
                     isUploading = false
                 }

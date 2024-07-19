@@ -45,6 +45,7 @@ import com.example.audioplayer.ui.Screen.FavDetail
 import com.example.audioplayer.ui.Screen.HomeScreen
 import com.example.audioplayer.ui.Screen.My_Detail
 import com.example.audioplayer.ui.Screen.My_Music
+import com.example.audioplayer.ui.Screen.ProfileEdit
 import com.example.audioplayer.ui.Screen.ProfileScreen
 import com.example.audioplayer.ui.Screen.WorldSong
 
@@ -184,8 +185,9 @@ fun Navigation(navController: NavHostController, audioItems: List<AudioItem>) {
             )
         }
 
-
-
+        composable(Screens.ProfileEdit.route) {
+            ProfileEdit(navController = navController)
+        }
         composable(route = Screens.Profile.route) {
             ProfileScreen(navController = navController)
         }
@@ -224,6 +226,12 @@ sealed class Screens(
     object MainScreen : Screens("MainScreen", Icons.Filled.MusicNote, Icons.Outlined.MusicNote)
     object LoginScreen : Screens("LoginScren", Icons.Filled.MusicNote, Icons.Outlined.MusicNote)
     object Profile : Screens("Profile", Icons.Filled.MusicNote, Icons.Outlined.MusicNote)
+    object ProfileEdit : Screens(
+        "com.example.audioplayer.ui.Screen.ProfileEdit",
+        Icons.Filled.MusicNote,
+        Icons.Outlined.MusicNote
+    )
+
     object AboutUs : Screens("AboutUs", Icons.Filled.MusicNote, Icons.Outlined.MusicNote)
 }
 

@@ -2,6 +2,7 @@ package com.example.audioplayer.ui.Screen
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
@@ -170,7 +171,7 @@ fun ProfileScreen(
                     Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
                 }
             }, actions = {
-                IconButton(onClick = { logout=!logout }) {
+                IconButton(onClick = { logout = !logout }) {
                     Icon(imageVector = Icons.Default.MoreVert, contentDescription = "")
                 }
 
@@ -201,7 +202,6 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             currentUser?.let {
-
 
                 LaunchedEffect(key1 = Unit) {
                     it.profileUrl = getImageUrlFromPrefs(context).toString()
@@ -280,7 +280,6 @@ fun ProfileScreen(
                             isUploading = false
                         }
                     }
-
                 }
 
                 if (it.profileUrl != null) {
@@ -314,7 +313,6 @@ fun ProfileScreen(
                                     trackColor = Color.Red
                                 )
                             }
-
                         }
                         Column(
                             modifier = Modifier
@@ -336,14 +334,12 @@ fun ProfileScreen(
                                     modifier = Modifier
                                         .size(22.dp)
                                         .clickable { launcher.launch("image/*") }
-
                                 )
                             }
                         }
                     }
                 } else {
                     Box(
-
                         modifier = Modifier
                             .clip(CircleShape)
                             .size(200.dp)
@@ -377,26 +373,24 @@ fun ProfileScreen(
                                     modifier = Modifier
                                         .size(22.dp)
                                         .clickable { launcher.launch("image/*") }
-
                                 )
                             }
                         }
-
                     }
-
                 }
 
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(text = "${currentUser?.name}", fontSize = 25.sp, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(5.dp))
-                Text(text = "@_all${currentUser?.password}", fontSize = 15.sp)
-
+                Text(text = "@${currentUser?.name}", fontSize = 15.sp)
 
                 Spacer(modifier = Modifier.height(40.dp))
 
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        navController.navigate(Screens.ProfileEdit.route)
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(end = 20.dp, start = 20.dp)
@@ -411,8 +405,6 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(50.dp))
 
                 Divider()
-
-
 
                 Column(
                     modifier = Modifier
@@ -475,6 +467,16 @@ fun ProfileScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
+                            .clickable {
+                                val sendIntent: Intent = Intent().apply {
+                                    action = Intent.ACTION_SEND
+                                    putExtra(Intent.EXTRA_TEXT, "${currentUser?.profileUrl}")
+                                    type = "text/plain"
+                                }
+
+                                val shareIntent = Intent.createChooser(sendIntent, null)
+                                context.startActivity(shareIntent)
+                            }
                             .padding(start = 10.dp),
                         horizontalArrangement = Arrangement.spacedBy(18.dp),
                         verticalAlignment = Alignment.CenterVertically
