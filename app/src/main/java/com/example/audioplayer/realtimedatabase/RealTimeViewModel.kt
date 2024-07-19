@@ -39,10 +39,10 @@ class MainViewModel2(private val repository: Repository2) : ViewModel() {
         }
     }
 
-    fun editMessage(messageId: String, updatedMessage: Message) {
+    fun editMessage(userId: String, updatedMessage: Message) {
         viewModelScope.launch {
             try {
-                repository.editMessage(messageId, updatedMessage)
+                repository.editMessage(userId, updatedMessage)
                 Log.d("MainViewModel2", "Message edited: $updatedMessage")
             } catch (e: Exception) {
                 Log.e("MainViewModel2", "Error editing message: ${e.message}", e)
@@ -50,6 +50,7 @@ class MainViewModel2(private val repository: Repository2) : ViewModel() {
         }
     }
 }
+
 
 
 
@@ -81,9 +82,9 @@ class Repository2(private val databaseReference: DatabaseReference) {
         }
     }
 
-    suspend fun editMessage(messageId: String, updatedMessage: Message) {
+    suspend fun editMessage(userId: String, updatedMessage: Message) {
         try {
-            databaseReference.child(messageId).setValue(updatedMessage).addOnFailureListener {
+            databaseReference.child(userId).setValue(updatedMessage).addOnFailureListener {
                 throw it
             }
         } catch (e: Exception) {
@@ -91,5 +92,6 @@ class Repository2(private val databaseReference: DatabaseReference) {
         }
     }
 }
+
 
 
