@@ -389,7 +389,11 @@ fun ProfileScreen(
 
                 Button(
                     onClick = {
-                        navController.navigate(Screens.ProfileEdit.route)
+                        val name=Uri.encode(currentUser?.name)
+                        val email=Uri.encode(currentUser?.email)
+                        val password=Uri.encode(currentUser?.password)
+                        val profile=Uri.encode(currentUser?.profileUrl)
+                        navController.navigate(Screens.ProfileEdit.route + "/$name/$email/$password/$profile")
                     },
                     modifier = Modifier
                         .fillMaxWidth()

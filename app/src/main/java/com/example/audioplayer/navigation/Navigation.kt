@@ -2,9 +2,8 @@
 
 package com.example.audioplayer.navigation
 
-import ProfileEditScreen
+import com.example.audioplayer.ui.Screen.ProfileEditScreen
 import android.annotation.SuppressLint
-import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
 import androidx.compose.material3.*
@@ -12,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -119,8 +117,37 @@ fun Navigation(navController: NavHostController, audioItems: List<AudioItem>) {
                 name
             )
         }
-        composable(Screens.ProfileEdit.route) {
-            ProfileEditScreen(navController = navController, userId = sharedPreferencesId.toString())
+        composable(
+            Screens.ProfileEdit.route + "/{name}/{email}/{password}/{profile}",
+            arguments = listOf(
+                navArgument("name") {
+                    type = NavType.StringType
+                },
+                navArgument("email") {
+                    type = NavType.StringType
+                },
+
+                navArgument("password") {
+                    type = NavType.StringType
+                },
+                navArgument("profile") {
+                    type = NavType.StringType
+                },
+
+                )
+        ) {
+            val name = it.arguments?.getString("name")
+            val email = it.arguments?.getString("email")
+            val password = it.arguments?.getString("password")
+            val profile = it.arguments?.getString("profile")
+            ProfileEditScreen(
+                navController = navController,
+                userId = sharedPreferencesId.toString(),
+                name,
+                email,
+                password,
+                profile
+            )
         }
         composable(Screens.Profile.route) {
             ProfileScreen(navController = navController)
@@ -133,13 +160,14 @@ fun Navigation(navController: NavHostController, audioItems: List<AudioItem>) {
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun AppNavHost( audioItems: List<AudioItem>) {
+fun AppNavHost(audioItems: List<AudioItem>) {
     val navController = rememberNavController()
     var showBottomNav by remember { mutableStateOf(true) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    showBottomNav = currentRoute != Screens.LoginScreen.route && currentRoute != Screens.MainScreen.route
+    showBottomNav =
+        currentRoute != Screens.LoginScreen.route && currentRoute != Screens.MainScreen.route
 
     Scaffold(
         bottomBar = {
@@ -172,6 +200,7 @@ sealed class Screens(
         Icons.Filled.MusicNote,
         Icons.Outlined.MusicNote
     )
+
     object AboutUs : Screens("AboutUs", Icons.Filled.MusicNote, Icons.Outlined.MusicNote)
 }
 
