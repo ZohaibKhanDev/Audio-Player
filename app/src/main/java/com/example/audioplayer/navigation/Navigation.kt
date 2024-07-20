@@ -2,7 +2,7 @@
 
 package com.example.audioplayer.navigation
 
-import acom.example.audioplayer.ui.Screen.ProfileEdit
+import ProfileEditScreen
 import android.annotation.SuppressLint
 import android.content.ContentUris
 import android.content.Context
@@ -40,8 +40,8 @@ import com.example.audioplayer.AudioItem
 import com.example.audioplayer.loginauth.screens.LoginScreen
 import com.example.audioplayer.loginauth.screens.MainScreen
 import com.example.audioplayer.ui.Screen.AboutUs
-import com.example.audioplayer.ui.Screen.Fav
 import com.example.audioplayer.ui.Screen.DetailScreen
+import com.example.audioplayer.ui.Screen.Fav
 import com.example.audioplayer.ui.Screen.FavDetail
 import com.example.audioplayer.ui.Screen.HomeScreen
 import com.example.audioplayer.ui.Screen.My_Detail
@@ -186,7 +186,7 @@ fun Navigation(navController: NavHostController, audioItems: List<AudioItem>) {
         }
 
         composable(Screens.ProfileEdit.route) {
-            ProfileEdit(navController = navController)
+            ProfileEditScreen(navController = navController, userId = sharedPreferencesId.toString())
         }
         composable(route = Screens.Profile.route) {
             ProfileScreen(navController = navController)
