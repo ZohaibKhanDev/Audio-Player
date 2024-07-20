@@ -15,7 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import com.example.audioplayer.appModule.appModule
-import com.example.audioplayer.navigation.MainContent
+import com.example.audioplayer.navigation.AppNavHost
 import com.example.audioplayer.ui.theme.AudioPlayerTheme
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -34,7 +34,7 @@ class MainActivity : ComponentActivity() {
         }
         setContent {
             AudioPlayerTheme {
-                MainContent(audioItems = audioItems)
+                AppNavHost(audioItems = audioItems)
             }
         }
         requestPermission()
