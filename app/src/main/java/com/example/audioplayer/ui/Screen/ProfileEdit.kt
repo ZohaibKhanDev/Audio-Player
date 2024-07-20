@@ -2,12 +2,14 @@ package com.example.audioplayer.ui.Screen
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.widget.Button
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.CameraAlt
@@ -23,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.audioplayer.realtimedatabase.Message
+import org.koin.core.qualifier.named
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -39,12 +42,15 @@ fun ProfileEditScreen(
     var selectedImage by remember {
         mutableStateOf<Uri?>(null)
     }
+    var names = name
+    var email = email
+    var password = password
     val currentUser by remember { mutableStateOf<Message?>(null) }
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent(),
-        onResult = {
-            selectedImage = it
-        })
+    val launcher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent(),
+            onResult = {
+                selectedImage = it
+            })
     Scaffold(topBar = {
         TopAppBar(title = {
             Text(text = "Back")
@@ -53,7 +59,7 @@ fun ProfileEditScreen(
         }, actions = {
             Icon(imageVector = Icons.Rounded.Edit, contentDescription = "")
         })
-    }) {
+    }) { it ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -73,8 +79,7 @@ fun ProfileEditScreen(
                     contentDescription = "",
                     modifier = Modifier
                         .fillMaxSize()
-                        .clickable {
-                        },
+                        .clickable {},
                     contentScale = ContentScale.Crop
                 )
 
@@ -89,22 +94,69 @@ fun ProfileEditScreen(
                         modifier = Modifier
                             .size(32.dp)
                             .clip(CircleShape)
-                            .background(Color.LightGray),
-                        contentAlignment = Alignment.Center
+                            .background(Color.LightGray), contentAlignment = Alignment.Center
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.CameraAlt,
+                        Icon(imageVector = Icons.Default.CameraAlt,
                             contentDescription = "",
                             modifier = Modifier
                                 .size(22.dp)
-                                .clickable { launcher.launch("image/*") }
-                        )
+                                .clickable { launcher.launch("image/*") })
                     }
                 }
             }
 
             Spacer(modifier = Modifier.height(15.dp))
-            Text(text = "$name")
+            OutlinedTextField(value = names.toString(), onValueChange = {
+                names = it
+            }, label = {
+                Text(text = "Name")
+            }, colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.White.copy(alpha = 0.30f),
+                unfocusedContainerColor = Color.White.copy(alpha = 0.30f),
+            )
+            )
+
+
+            Spacer(modifier = Modifier.height(7.dp))
+            OutlinedTextField(value = email.toString(), onValueChange = {
+                email = it
+            }, label = {
+                Text(text = "email")
+            }, colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.White.copy(alpha = 0.30f),
+                unfocusedContainerColor = Color.White.copy(alpha = 0.30f),
+            )
+            )
+
+
+            Spacer(modifier = Modifier.height(7.dp))
+            OutlinedTextField(value = password.toString(), onValueChange = {
+                password = it
+            }, label = {
+                Text(text = "password")
+            }, colors = TextFieldDefaults.colors(
+                focusedContainerColor = Color.White.copy(alpha = 0.30f),
+                unfocusedContainerColor = Color.White.copy(alpha = 0.30f),
+            )
+            )
+
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+
+            Button(
+                onClick = {
+                    navController.navigateUp()
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp)
+                    .height(55.dp),
+                shape = RoundedCornerShape(7.dp),
+            ) {
+                Text(text = "Update")
+            }
+
         }
     }
 }
