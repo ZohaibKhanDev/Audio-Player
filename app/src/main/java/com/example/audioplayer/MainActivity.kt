@@ -1,6 +1,5 @@
 package com.example.audioplayer
 
-import com.example.audioplayer.loginauth.screens.LoginScreen
 import android.content.ContentUris
 import android.content.Context
 import android.content.pm.PackageManager
@@ -16,8 +15,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 import com.example.audioplayer.appModule.appModule
-import com.example.audioplayer.loginauth.screens.MainScreen
-import com.example.audioplayer.navigation.NavEntry
+import com.example.audioplayer.navigation.MainContent
 import com.example.audioplayer.ui.theme.AudioPlayerTheme
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -36,7 +34,7 @@ class MainActivity : ComponentActivity() {
         }
         setContent {
             AudioPlayerTheme {
-              NavEntry(audioItems = audioItems)
+                MainContent(audioItems = audioItems)
             }
         }
         requestPermission()

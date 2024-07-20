@@ -8,6 +8,7 @@ import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
@@ -25,7 +26,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -202,10 +206,32 @@ fun Navigation(navController: NavHostController, audioItems: List<AudioItem>) {
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun NavEntry(audioItems: List<AudioItem>) {
-    val navController = rememberNavController()
-    Scaffold(bottomBar = { ButtonNavigation(navController = navController) }) {
-        Navigation(navController = navController, audioItems)
+fun AppNavHost(navController: NavHostController) {
+    var showBottomNav by remember { mutableStateOf(true) }
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+
+    showBottomNav = currentRoute != Screens.LoginScreen.route && currentRoute != Screens.MainScreen.route
+
+    Scaffold(
+        bottomBar = {
+            if (showBottomNav) {
+                BottomNavigation(navController = navController)
+            }
+        }
+    ) { innerPadding ->
+        NavHost(
+            navController = navController,
+            startDestination = Screens.MainScreen.route,
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            composable(Screens.LoginScreen.route) {
+                LoginScreen(navController = navController)
+            }
+            composable(Screens.MainScreen.route) {
+                MainScreen(navController = navController)
+            }
+        }
     }
 }
 
@@ -236,8 +262,8 @@ sealed class Screens(
 }
 
 @Composable
-fun ButtonNavigation(navController: NavHostController) {
-    val item = listOf(
+fun BottomNavigation(navController: NavHostController) {
+    val items = listOf(
         Screens.Home,
         Screens.Fav,
         Screens.WorldSong,
@@ -247,60 +273,28 @@ fun ButtonNavigation(navController: NavHostController) {
     NavigationBar(containerColor = Color(0XFF1E1E1E)) {
         val navStack by navController.currentBackStackEntryAsState()
         val current = navStack?.destination?.route
-        item?.forEach {
-            NavigationBarItem(selected = current == it.route, onClick = {
-                navController.navigate(it.route) {
-                    navController.graph?.let {
-                        it.route?.let { it1 -> popUpTo(it1) }
-                        launchSingleTop = true
-                        restoreState = true
+        items.forEach {
+            NavigationBarItem(
+                selected = current == it.route,
+                onClick = {
+                    navController.navigate(it.route) {
+                        navController.graph?.let { graph ->
+                            graph.route?.let { route -> popUpTo(route) }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     }
-                }
-            }, icon = {
-                if (current == it.route) {
-                    Icon(imageVector = it.selectedIcon, contentDescription = "", tint = Color.Red)
-                } else {
-                    Icon(
-                        imageVector = it.unselectedIcon,
-                        contentDescription = "",
-                        tint = Color.White
-                    )
-                }
-            }, label = {
-                if (current == it.route) {
-                    Text(text = it.route, color = Color.Red)
-                } else {
-                    Text(text = it.route, color = Color.White)
-                }
-            }, colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent))
-        }
-    }
-
-
-}
-
-fun getAudioList(context: Context): List<String> {
-    val audioList = mutableListOf<String>()
-    val projection = arrayOf(
-        MediaStore.Audio.Media._ID,
-        MediaStore.Audio.Media.DISPLAY_NAME,
-        MediaStore.Audio.Media.MIME_TYPE
-    )
-    val contentResolver = context.contentResolver
-    val cursor = contentResolver.query(
-        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, null, null, null
-    )
-
-    cursor?.use { cursor ->
-        val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
-        while (cursor.moveToNext()) {
-            val audioId = cursor.getLong(idColumn)
-            val audioUri = ContentUris.withAppendedId(
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, audioId
+                },
+                icon = {
+                    val iconColor = if (current == it.route) Color.Red else Color.White
+                    Icon(imageVector = if (current == it.route) it.selectedIcon else it.unselectedIcon, contentDescription = "", tint = iconColor)
+                },
+                label = {
+                    val textColor = if (current == it.route) Color.Red else Color.White
+                    Text(text = it.route, color = textColor)
+                },
+                colors = NavigationBarItemDefaults.colors(indicatorColor = Color.Transparent)
             )
-            audioList.add(audioUri.toString())
         }
     }
-
-    return audioList
 }
